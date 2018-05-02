@@ -96,7 +96,7 @@ namespace WF
             Stream stream;
             SaveFileDialog saveFileDialog1 = new SaveFileDialog
             {
-                Filter = "csv files (*.csv)|*.csv",
+                Filter = "xml files (*.xml)|*.xml",
                 FilterIndex = 2,
                 RestoreDirectory = true
             };
@@ -105,7 +105,7 @@ namespace WF
             {
                 if ((stream = saveFileDialog1.OpenFile()) != null)
                 {
-                    itemRepository.Save(stream);
+                    itemRepository.Save(stream, saveToXML: true);
 
                     stream.Close();
                 }

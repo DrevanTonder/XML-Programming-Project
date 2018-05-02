@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace BL
 {
@@ -27,5 +28,31 @@ namespace BL
         /// The Item's Code
         /// </summary>
         public string Code { get; set; }
+
+        /// <summary>
+        /// Format this object as an XElement
+        /// </summary>
+        public XElement ToXElement()
+        {
+            return new XElement("item",
+                        new XElement("code", this.Code),
+                        new XElement("description", this.Description),
+                        new XElement("current-count", this.CurrentCount),
+                        new XElement("on-order", this.OnOrder)
+                    );
+        }
+
+        /// <summary>
+        /// Get an XMl Header for this object
+        /// </summary>
+        public static XElement XMLHeader()
+        {
+            return new XElement("header",
+                            new XElement("name", "Code"),
+                            new XElement("name", "Description"),
+                            new XElement("name", "Current Count"),
+                            new XElement("name", "On Order")
+                        );
+        }
     }
 }

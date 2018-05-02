@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace BL
 {
@@ -63,17 +64,32 @@ namespace BL
         /// Saves a list of items from the supplied stream
         /// </summary>
         /// <param name="stream">The stream to save to</param>
+        /// <param name="saveToXML">whether to save to xml or not</param>
+        /// <param name="stylesheet">The stylesheet to add</param>
         /// <exception cref="System.ArgumentNullException">Thrown when the stream is null</exception>
-        public void Save(Stream stream)
+        public void Save(Stream stream, bool saveToXML = false, string stylesheet = "style1.css" )
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream) + " can not be null", nameof(stream));
 
-            using (var writer = new StreamWriter(stream))
-            using (var csv = new CsvHelper.CsvWriter(writer))
+            if (saveToXML)
             {
-                csv.Configuration.TypeConverterCache.AddConverter(typeof(bool), new MyBooleanConverter());
-                csv.Configuration.RegisterClassMap<ItemMap>();
-                csv.WriteRecords(items.Values);
+                new XDocument(
+                    new XProcessingInstruction("xml-stylesheet", $"href='{stylesheet}' type='text/css'"),
+                    new XElement("items",
+                        Item.XMLHeader(),
+                        items.Select(item => item.Value.ToXElement())
+                    )
+                )
+                .Save(stream);
+            } else
+            {
+                using (var writer = new StreamWriter(stream))
+                using (var csv = new CsvHelper.CsvWriter(writer))
+                {
+                    csv.Configuration.TypeConverterCache.AddConverter(typeof(bool), new MyBooleanConverter());
+                    csv.Configuration.RegisterClassMap<ItemMap>();
+                    csv.WriteRecords(items.Values);
+                }
             }
         }
 
