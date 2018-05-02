@@ -60,7 +60,7 @@ namespace WF
 
             CreateColumn("Item Code",ColumnType.Code, typeof(string));
             CreateColumn("Description", ColumnType.Description, typeof(string));
-            CreateColumn("Current Count", ColumnType.CurrentCount, typeof(int), readOnly:false); 
+            CreateColumn("Current Count", ColumnType.CurrentCount, typeof(int)); 
             CreateColumn("On Order", ColumnType.OnOrder, typeof(bool));
         }
 
