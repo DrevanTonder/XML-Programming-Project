@@ -26,8 +26,6 @@ namespace WF
         {
             itemRepository = new ItemRepository();
 
-            ItemDataGridView.DataError += ItemDataGridView_DataError;
-
             CreateColumns();
         }
 
@@ -79,18 +77,6 @@ namespace WF
             column.Name = name;
             column.ValueType = type;
             column.ReadOnly = readOnly;
-        }
-
-        /// <summary>
-        /// This function is run when the user ends editing a field.
-        /// It then updates the item edited.
-        /// </summary>
-        private void ItemDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            var itemCode = (string)ItemDataGridView.Rows[e.RowIndex].Cells[0].Value;
-            var itemCurrentCount = (int)ItemDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-
-            itemRepository.Update(itemCode,itemCurrentCount);
         }
 
         /// <summary>
@@ -166,17 +152,6 @@ namespace WF
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
-        }
-
-        /// <summary>
-        /// Custom Errors
-        /// </summary>
-        private void ItemDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            if(e.ColumnIndex == (int)ColumnType.CurrentCount && e.Context.HasFlag(DataGridViewDataErrorContexts.Commit))
-            {
-                MessageBox.Show($"{ColumnType.CurrentCount.ToString()} is an integer only column.");
-            }       
         }
     }
 }
