@@ -1,0 +1,39 @@
+items { 
+    display: flex; 
+    flex-direction: column; 
+    width: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;
+}
+
+item, header { 
+    display: flex;
+}
+
+item *, header * {
+    width: 25%;
+}
+
+header { 
+    background-color: lightseagreen;
+    color: white;
+}
+
+header * {
+    padding: 16px 32px;
+}
+
+item * {
+    padding: 8px 16px;
+}
+
+item {
+    border-bottom: 1px solid black;
+}
+
+item:hover {
+    background-color: lightslategray;
+    color: white;
+    cursor: pointer;
+}
+
