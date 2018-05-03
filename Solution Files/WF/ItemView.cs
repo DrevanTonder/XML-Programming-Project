@@ -110,7 +110,7 @@ namespace WF
                     if (radioButton2.Checked)
                         style = Stylesheet.Style.Cards;
 
-                    itemRepository.Save(stream, style);
+                    XML.SaveItems(itemRepository.Items, stream, style);
 
                     stream.Close();
                 }

@@ -16,6 +16,16 @@ namespace BL
     {
         private Dictionary<string, Item> items;
 
+        /// <summary>
+        /// IEnumerable of the items
+        /// </summary>
+        public IEnumerable<Item> Items
+        {
+            get
+            {
+                return items.Select(keyValuePair => keyValuePair.Value);
+            }
+        }
         /// <summary> 
         ///  ItemRepository Constructor
         /// </summary>
@@ -58,26 +68,6 @@ namespace BL
             }
 
             return itemList;
-        }
-
-        /// <summary>
-        /// Saves a list of items from the supplied stream
-        /// </summary>
-        /// <param name="stream">The stream to save to</param>
-        /// <param name="stylesheet">The stylesheet to add</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the stream is null</exception>
-        public void Save(Stream stream, Stylesheet.Style stylesheet)
-        {
-            if (stream == null) throw new ArgumentNullException(nameof(stream) + " can not be null", nameof(stream));
-
-            new XDocument(
-                new XProcessingInstruction("xml-stylesheet", $"href='{Stylesheet.GetStyleFilename(stylesheet)}' type='text/css'"),
-                new XElement("items",
-                    Item.XMLHeader(),
-                    items.Select(item => item.Value.ToXElement())
-                )
-            )
-            .Save(stream);
         }
 
         /// <summary>
