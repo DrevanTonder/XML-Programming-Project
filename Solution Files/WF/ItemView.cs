@@ -105,7 +105,12 @@ namespace WF
             {
                 if ((stream = saveFileDialog1.OpenFile()) != null)
                 {
-                    itemRepository.Save(stream, saveToXML: true);
+
+                    Stylesheet.Style style = Stylesheet.Style.Table;
+                    if (radioButton2.Checked)
+                        style = Stylesheet.Style.Cards;
+
+                    itemRepository.Save(stream, style);
 
                     stream.Close();
                 }

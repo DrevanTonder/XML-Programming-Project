@@ -64,55 +64,20 @@ namespace BL
         /// Saves a list of items from the supplied stream
         /// </summary>
         /// <param name="stream">The stream to save to</param>
-        /// <param name="saveToXML">whether to save to xml or not</param>
         /// <param name="stylesheet">The stylesheet to add</param>
         /// <exception cref="System.ArgumentNullException">Thrown when the stream is null</exception>
-        public void Save(Stream stream, bool saveToXML = false, string stylesheet = "style1.css" )
+        public void Save(Stream stream, Stylesheet.Style stylesheet)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream) + " can not be null", nameof(stream));
 
-            if (saveToXML)
-            {
-                new XDocument(
-                    new XProcessingInstruction("xml-stylesheet", $"href='{stylesheet}' type='text/css'"),
-                    new XElement("items",
-                        Item.XMLHeader(),
-                        items.Select(item => item.Value.ToXElement())
-                    )
+            new XDocument(
+                new XProcessingInstruction("xml-stylesheet", $"href='{Stylesheet.GetStyleFilename(stylesheet)}' type='text/css'"),
+                new XElement("items",
+                    Item.XMLHeader(),
+                    items.Select(item => item.Value.ToXElement())
                 )
-                .Save(stream);
-            } else
-            {
-                using (var writer = new StreamWriter(stream))
-                using (var csv = new CsvHelper.CsvWriter(writer))
-                {
-                    csv.Configuration.TypeConverterCache.AddConverter(typeof(bool), new MyBooleanConverter());
-                    csv.Configuration.RegisterClassMap<ItemMap>();
-                    csv.WriteRecords(items.Values);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Updates an Item's Current Count.
-        /// </summary>
-        /// <param name="itemCode">The Item's code used to find the item</param>
-        /// <param name="currentCount">The Item's new CurrentCount</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when itemCode is null</exception>
-        /// <exception cref="System.ArgumentException">Thrown when itemCode is not in the itemRepository items dictionary</exception>
-        public void Update(string itemCode, int currentCount)
-        {
-            if (itemCode == null) throw new ArgumentNullException(nameof(itemCode) + " can not be null", nameof(itemCode));
-
-            try
-            {
-                items[itemCode].CurrentCount = currentCount;
-            }
-            catch (KeyNotFoundException e)
-            {
-                throw new ArgumentException(nameof(itemCode) + " is not an item code", e);
-            }
-            
+            )
+            .Save(stream);
         }
 
         /// <summary>
@@ -120,18 +85,6 @@ namespace BL
         /// </summary>
         private class MyBooleanConverter : CsvHelper.TypeConversion.DefaultTypeConverter
         {
-            public override string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData)
-            {
-                if (value == null)
-                {
-                    return string.Empty;
-                }
-
-                var boolValue = (bool)value;
-
-                return boolValue ? "Yes" : "No";
-            }
-
             public override object ConvertFromString(string text, CsvHelper.IReaderRow row, CsvHelper.Configuration.MemberMapData memberMapData)
             {
                 if (text == null)
