@@ -33,11 +33,11 @@ namespace BL
             )
             .Save(stream);
 
-            CopyStylesheet(stream, style);
+            copyStylesheet(stream, style);
         }
 
 
-        static void CopyStylesheet(Stream stream, Stylesheet.Style style)
+        static void copyStylesheet(Stream stream, Stylesheet.Style style)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream) + " can not be null", nameof(stream));
 
