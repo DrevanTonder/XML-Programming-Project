@@ -54,6 +54,7 @@
     <Compile Include="ItemRepositoryTests.cs" />
     <Compile Include="ItemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StylesheetTests.cs" />
     <Compile Include="XMLTests.cs" />
   </ItemGroup>
   <ItemGroup>
