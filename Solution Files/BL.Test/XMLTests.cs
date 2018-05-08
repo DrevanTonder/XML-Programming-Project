@@ -61,5 +61,47 @@ namespace BL.Test
             var stylesheetPath = Path.Combine(@"Files/" + Stylesheet.GetStyleFilename(style));
             Assert.AreEqual(true, File.Exists(stylesheetPath));
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SaveTestItemsNull()
+        {
+            //Assign
+            var style = Stylesheet.Style.Table;
+
+            //Act
+            using (var stream = File.Create(@"Files/test.xml"))
+            {
+                XML.SaveItems(null, stream, style);
+            }
+
+
+            //Assert
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SaveTestStreamNull()
+        {
+            //Assign
+            var items = new List<Item>()
+            {
+                new Item()
+                {
+                    Code = "123",
+                    Description = "Testing",
+                    CurrentCount = 123,
+                    OnOrder = true
+                }
+            };
+            var style = Stylesheet.Style.Table;
+            Stream stream = null;
+
+            //Act
+            XML.SaveItems(items, stream, style);
+
+
+            //Assert
+        }
     }
 }
